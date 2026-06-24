@@ -1,0 +1,383 @@
+/* ==========================================================================
+   STellarAcademy: NASA Retro Pixel Space Command Styling System
+   ========================================================================== */
+
+:root {
+  /* NASA Official Color Palette */
+  --nasa-blue: #0B3D91;         /* NASA Insignia Blue */
+  --nasa-red: #FC3D21;          /* NASA Insignia Red (Worm Red) */
+  --nasa-orange: #FF5C00;       /* Astronaut Launch Pumpkin Orange */
+  --nasa-gold: #E0AA3E;         /* Spacecraft Solar Array Gold */
+  --nasa-silver: #A0A2A6;       /* Titanium Spacecraft Metal */
+  --nasa-white: #FFFFFF;
+  
+  /* Cosmic Console Dark Theme (derived from NASA Blue and Space Black) */
+  --bg-deep: #050714;           /* Deepest Space Navy Black */
+  --bg-console: #0c0f26;        /* Arcade Cabinet Frame (Navy Blue) */
+  --bg-terminal: #070918;       /* Inner Terminal Screen Background */
+  --border-arcade: #000000;     /* Heavy 8-bit black borders */
+  
+  /* Text colors */
+  --text-primary: #FFFFFF;
+  --text-terminal: #00FF66;     /* Vintage CRT Green for telemetry */
+  --text-muted: #A0A2A6;
+  
+  /* Typography */
+  --font-retro: 'Press Start 2P', monospace;
+  --font-terminal: 'Share Tech Mono', monospace;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  image-rendering: pixelated; /* Crisp pixel rendering for images/borders */
+}
+
+body {
+  font-family: var(--font-terminal);
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  background-image: 
+    linear-gradient(rgba(11, 61, 145, 0.05) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(11, 61, 145, 0.05) 2px, transparent 2px);
+  background-size: 32px 32px; /* Subtle retro grid background */
+  position: relative;
+}
+
+/* Subtle CRT Scanline Effect & Screen Flicker */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  background-size: 100% 4px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Custom 8-Bit Pixel Scrollbars */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-terminal);
+  border-left: 4px solid var(--border-arcade);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--nasa-silver);
+  border: 4px solid var(--border-arcade);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nasa-gold);
+}
+
+/* main Layout: Split Screen Arcade */
+.app-container {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  background: var(--border-arcade);
+  gap: 8px;
+  padding: 8px;
+}
+
+@media (max-width: 1024px) {
+  .app-container {
+    grid-template-columns: 380px 1fr;
+  }
+}
+
+/* Left Panel: Retro Chat Command Console */
+.sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-console);
+  border: 4px solid var(--border-arcade);
+  box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.4), inset 4px 4px 0px 0px rgba(255,255,255,0.1);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar Header: Command Title */
+.sidebar-header {
+  padding: 16px;
+  background: var(--bg-terminal);
+  border-bottom: 4px solid var(--border-arcade);
+  text-align: center;
+}
+
+.sidebar-header h1 {
+  font-family: var(--font-retro);
+  font-size: 0.95rem;
+  color: var(--nasa-red);
+  text-shadow: 2px 2px 0px #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  letter-spacing: 1px;
+}
+
+.sidebar-header p {
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  color: var(--nasa-gold);
+  margin-top: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Chat Screen Inner Viewport (vintage green monitor glow) */
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: var(--bg-terminal);
+  border-bottom: 4px solid var(--border-arcade);
+  box-shadow: inset 0px 4px 12px rgba(0,0,0,0.8);
+}
+
+/* 8-Bit Chat Bubbles */
+.message-bubble {
+  max-width: 90%;
+  padding: 12px 14px;
+  border: 4px solid var(--border-arcade);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  position: relative;
+}
+
+/* NES Style Bubble Arrows */
+.message-user {
+  background: var(--nasa-blue);
+  color: var(--text-primary);
+  align-self: flex-end;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.message-bot {
+  background: #12183a;
+  color: var(--text-primary);
+  align-self: flex-start;
+  box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 1);
+  border-color: var(--border-arcade);
+}
+
+.message-meta {
+  font-family: var(--font-terminal);
+  font-size: 0.75rem;
+  color: var(--nasa-silver);
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+
+/* Retro Telemetry Sync Badge */
+.target-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--nasa-orange);
+  border: 3px solid var(--border-arcade);
+  color: var(--text-primary);
+  font-family: var(--font-retro);
+  font-size: 0.55rem;
+  padding: 6px 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #000;
+  text-transform: uppercase;
+  transition: transform 0.1s ease;
+}
+
+.target-badge:hover {
+  background: var(--nasa-gold);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000;
+}
+
+.target-badge:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+/* Quick Suggestion Pills (Classic Game Selection Buttons) */
+.suggestions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  background: var(--bg-console);
+  border-bottom: 4px solid var(--border-arcade);
+}
+
+.suggestion-pill {
+  background: #1b2044;
+  border: 3px solid var(--border-arcade);
+  padding: 8px 12px;
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  color: var(--nasa-white);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px 0px #000;
+  transition: all 0.1s ease;
+}
+
+.suggestion-pill:hover {
+  background: var(--nasa-blue);
+  color: var(--text-primary);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px 0px #000;
+}
+
+.suggestion-pill:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px #000;
+}
+
+/* Chat Entry Form */
+.input-form {
+  padding: 12px 16px;
+  background: var(--bg-console);
+  display: flex;
+  gap: 8px;
+}
+
+/* CRT Green Text Input box */
+.glass-input {
+  background: var(--bg-terminal);
+  border: 4px solid var(--border-arcade);
+  color: var(--text-terminal);
+  font-family: var(--font-terminal);
+  font-size: 1rem;
+  padding: 10px 12px;
+  outline: none;
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 1px;
+}
+
+.glass-input:focus {
+  border-color: var(--nasa-blue);
+  background: #090c1e;
+}
+
+/* Pixel Send Button */
+.send-button {
+  background: var(--nasa-red);
+  border: 4px solid var(--border-arcade);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px 0px #000;
+  transition: all 0.1s ease;
+}
+
+.send-button:hover:not(:disabled) {
+  background: var(--nasa-orange);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #000;
+}
+
+.send-button:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #000;
+}
+
+.send-button:disabled {
+  background: var(--nasa-silver);
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Right Screen: 3D Simulation Frame Wrapper */
+.simulation-container {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-console);
+  border: 4px solid var(--border-arcade);
+  box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.4), inset 4px 4px 0px 0px rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.simulation-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #000;
+}
+
+/* Interactive simulation HUD overlay */
+.simulation-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--bg-terminal);
+  border: 4px solid var(--border-arcade);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 4px 4px 0px 0px #000;
+  pointer-events: none;
+}
+
+.simulation-overlay-title {
+  font-family: var(--font-retro);
+  font-size: 0.5rem;
+  color: var(--nasa-orange);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.simulation-overlay-value {
+  font-family: var(--font-retro);
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--text-terminal);
+  text-shadow: 0 0 4px rgba(0, 255, 102, 0.5);
+  margin-top: 4px;
+}
+
+/* Retro Blinking Cursor and Telemetry Transmitting */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-family: var(--font-terminal);
+  font-size: 0.9rem;
+  color: var(--nasa-gold);
+}
+
+.typing-indicator::after {
+  content: " █";
+  color: var(--nasa-gold);
+  animation: blink 0.8s infinite steps(1);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}

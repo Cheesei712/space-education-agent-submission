@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NASA_API=${NASA_API}
+      - AI_STUDIO_API=${AI_STUDIO_API}
+      - GEMINI_API_KEY=${AI_STUDIO_API}
+    env_file:
+      - ../.env
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
