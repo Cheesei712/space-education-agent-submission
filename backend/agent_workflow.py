@@ -14,13 +14,39 @@ from mcp import StdioServerParameters
 # ---------------------------------------------------------
 def clean_json_string(s: str) -> str:
     s = s.strip()
-    # Extract the JSON block between the first '{' and the last '}'
-    start = s.find('{')
+    # Remove any markdown code block wrappers if present
+    if s.startswith("```"):
+        nl = s.find("\n")
+        if nl != -1:
+            s = s[nl:].strip()
+        s = s.rstrip("`").strip()
+        
+    # Find all indices of '{'
+    braces = [i for i, char in enumerate(s) if char == '{']
+    if not braces:
+        return s
+        
     end = s.rfind('}')
-    if start != -1 and end != -1 and end > start:
-        s = s[start:end+1]
-    # Remove any surrounding backticks
-    s = s.strip("`").strip()
+    if end == -1:
+        return s
+        
+    # Try parsing starting from each '{' index
+    for start in braces:
+        if start >= end:
+            break
+        substring = s[start:end+1]
+        try:
+            # Import json locally to ensure it is available
+            import json
+            json.loads(substring)
+            return substring
+        except json.JSONDecodeError:
+            continue
+            
+    # Fallback to the original simple extraction if nothing parses
+    start = s.find('{')
+    if start != -1 and end > start:
+        return s[start:end+1]
     return s
 
 # ---------------------------------------------------------
