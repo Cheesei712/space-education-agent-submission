@@ -381,3 +381,30 @@ body::before {
 @keyframes blink {
   50% { opacity: 0; }
 }
+
+/* Retro Toggle Button for Suggestions */
+.toggle-suggestions-btn {
+  background: #1b2044;
+  border: 3px solid var(--border-arcade);
+  padding: 6px 10px;
+  font-family: var(--font-terminal);
+  font-size: 0.65rem;
+  color: var(--nasa-gold);
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #000;
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.toggle-suggestions-btn:hover {
+  background: var(--nasa-blue);
+  color: var(--nasa-white);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000;
+}
+
+.toggle-suggestions-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #000;
+}

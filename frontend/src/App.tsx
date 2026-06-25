@@ -51,6 +51,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [activeTarget, setActiveTarget] = useState('Solar System Orrery');
   const [iframeUrl, setIframeUrl] = useState('https://eyes.nasa.gov/apps/solar-system/');
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -73,9 +74,10 @@ export default function App() {
     setLoading(true);
 
     // Compute backend API URL dynamically (defaulting to local port 8000 if dev)
-    const apiHost = window.location.port === '3000' || window.location.port === '5173'
-      ? `${window.location.protocol}//${window.location.hostname}:8000`
-      : '';
+    const apiHost = import.meta.env.VITE_API_URL || 
+      (window.location.port === '3000' || window.location.port === '5173'
+        ? `${window.location.protocol}//${window.location.hostname}:8000`
+        : '');
 
     try {
       const response = await fetch(`${apiHost}/api/chat`, {
@@ -132,14 +134,24 @@ export default function App() {
     <div className="app-container">
       {/* LEFT PANEL: Chat Dashboard */}
       <div className="sidebar-panel glass-panel">
-        <div className="sidebar-header">
-          <h1>
-            <Orbit className="text-glow animate-pulse" size={24} style={{ color: 'var(--accent-purple)' }} />
-            <span className="text-glow font-bold">StellarAcademy</span>
-          </h1>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Astronomy AI Educator & NASA Simulator
-          </p>
+        <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+          <div style={{ textAlign: 'left' }}>
+            <h1 style={{ justifyContent: 'flex-start' }}>
+              <Orbit className="text-glow animate-pulse" size={24} style={{ color: 'var(--accent-purple)' }} />
+              <span className="text-glow font-bold">StellarAcademy</span>
+            </h1>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              Astronomy AI Educator & NASA Simulator
+            </p>
+          </div>
+          <button
+            type="button"
+            className="toggle-suggestions-btn"
+            onClick={() => setShowSuggestions(prev => !prev)}
+            title={showSuggestions ? "Hide quick suggestions" : "Show quick suggestions"}
+          >
+            {showSuggestions ? "SUGGESTIONS: ON" : "SUGGESTIONS: OFF"}
+          </button>
         </div>
 
         {/* Messages */}
@@ -181,18 +193,20 @@ export default function App() {
         </div>
 
         {/* Quick Suggestion Pills */}
-        <div className="suggestions-container">
-          {QUICK_SUGGESTIONS.map((s, i) => (
-            <button
-              key={i}
-              className="suggestion-pill"
-              onClick={() => handleSend(s)}
-              disabled={loading}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+        {showSuggestions && (
+          <div className="suggestions-container">
+            {QUICK_SUGGESTIONS.map((s, i) => (
+              <button
+                key={i}
+                className="suggestion-pill"
+                onClick={() => handleSend(s)}
+                disabled={loading}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Chat input form */}
         <form onSubmit={handleFormSubmit} className="input-form">

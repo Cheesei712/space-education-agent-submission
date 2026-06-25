@@ -10,7 +10,7 @@ services:
       - AI_STUDIO_API=${AI_STUDIO_API}
       - GEMINI_API_KEY=${AI_STUDIO_API}
     env_file:
-      - ../.env
+      - ./.env
     restart: always
 
   frontend:
